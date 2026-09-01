@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS tentativa_acesso;
+DROP TABLE IF EXISTS cirurgia;
+DROP TABLE IF EXISTS doenca;
+DROP TABLE IF EXISTS medicamento;
+DROP TABLE IF EXISTS alergia;
+DROP TABLE IF EXISTS contato_emergencia;
+DROP TABLE IF EXISTS perfil;
+DROP TABLE IF EXISTS usuario;
+DROP TYPE IF EXISTS tipo_sanguineo_tipo;
+DROP TYPE IF EXISTS sexo_tipo;

@@ -1,0 +1,14 @@
+# binários
+/bin/
+/vitaltag-api
+*.exe
+
+# ambiente
+.env
+.env.local
+
+# ferramentas
+.DS_Store
+*.test
+coverage.out
+vendor/
