@@ -19,8 +19,8 @@ func NewQRCodeService(pr *repository.PerfilRepo) *QRCodeService {
 	return &QRCodeService{perfilRepo: pr}
 }
 
-// Gerar gera o QR Code do perfil do usuário em PNG (RF06).
-// O QR Code contém apenas a URL pública — sem dados clínicos.
+// Gerar generates the user's profile QR Code as a PNG (RF06).
+// The QR Code contains only the public URL — no clinical data.
 func (s *QRCodeService) Gerar(ctx context.Context, usuarioID uuid.UUID) ([]byte, error) {
 	perfil, err := s.perfilRepo.BuscarPorUsuario(ctx, usuarioID)
 	if err != nil {

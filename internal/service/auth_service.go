@@ -27,7 +27,7 @@ func NewAuthService(r *repository.UsuarioRepo) *AuthService {
 	return &AuthService{usuarioRepo: r}
 }
 
-// Registrar cria conta (RF01). Requer consentimento LGPD (RNF04).
+// Registrar creates an account (RF01). LGPD consent is required (RNF04).
 func (s *AuthService) Registrar(ctx context.Context, req *model.RegistroRequest) (*model.TokenResponse, error) {
 	if !req.Consentimento {
 		return nil, ErrConsentimentoObrigatorio
@@ -56,7 +56,7 @@ func (s *AuthService) Registrar(ctx context.Context, req *model.RegistroRequest)
 	return &model.TokenResponse{Token: token}, nil
 }
 
-// Login autentica o usuário e devolve um JWT (RF02).
+// Login authenticates the user and returns a JWT (RF02).
 func (s *AuthService) Login(ctx context.Context, req *model.LoginRequest) (*model.TokenResponse, error) {
 	u, err := s.usuarioRepo.BuscarPorEmail(ctx, req.Email)
 	if err != nil {

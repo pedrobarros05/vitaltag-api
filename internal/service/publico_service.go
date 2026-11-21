@@ -18,7 +18,7 @@ const bloqueioDuracao = 15 * time.Minute
 var ErrPerfil BloqueadoErr
 var ErrSenhaPublicaInvalida = errors.New("senha pública incorreta")
 
-// BloqueadoErr é retornado quando o perfil está temporariamente bloqueado (RF09).
+// BloqueadoErr is returned when the profile is temporarily locked (RF09).
 type BloqueadoErr struct{}
 
 func (BloqueadoErr) Error() string { return "perfil bloqueado temporariamente" }
@@ -31,7 +31,7 @@ func NewPublicoService(pr *repository.PerfilRepo) *PublicoService {
 	return &PublicoService{perfilRepo: pr}
 }
 
-// AcessarPerfil valida a senha pública e retorna os dados clínicos (RF08, RF09).
+// AcessarPerfil validates the public password and returns clinical data (RF08, RF09).
 func (s *PublicoService) AcessarPerfil(ctx context.Context, slugStr, senha, ip string) (*model.PerfilCompleto, error) {
 	slug, err := uuid.Parse(slugStr)
 	if err != nil {
@@ -43,21 +43,21 @@ func (s *PublicoService) AcessarPerfil(ctx context.Context, slugStr, senha, ip s
 		return nil, err
 	}
 
-	// Verifica bloqueio ativo (RF09)
+	// Check for an active lockout (RF09)
 	if perfil.BloqueadoAte != nil && perfil.BloqueadoAte.After(time.Now()) {
 		return nil, BloqueadoErr{}
 	}
 
-	// Valida senha pública
+	// Validate the public password
 	if err := bcrypt.CompareHashAndPassword([]byte(perfil.SenhaPublicaHash), []byte(senha)); err != nil {
 		s.registrarFalhaEBloquearSeNecessario(ctx, perfil, ip)
 		return nil, ErrSenhaPublicaInvalida
 	}
 
-	// Acesso bem-sucedido — registra e zera o bloqueio
+	// Successful access — record it and clear the lockout
 	_ = s.perfilRepo.RegistrarTentativa(ctx, perfil.ID, ip, true)
 
-	// Limpa o hash antes de retornar (não expor ao socorrista)
+	// Clear the hash before returning (do not expose it to the responder)
 	perfil.SenhaPublicaHash = ""
 	return perfil, nil
 }

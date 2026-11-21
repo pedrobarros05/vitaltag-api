@@ -1,13 +1,13 @@
--- VitalTag — Modelagem do banco de dados (PostgreSQL 16)
--- Fase 1 — Disciplina Integradora de Desenvolvimento de Projetos
+-- VitalTag — Database schema (PostgreSQL 16)
+-- Phase 1 — Integrated Project Development Course
 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Tipos enumerados garantem consistência no nível do SGBD
+-- Enumerated types enforce consistency at the database level
 CREATE TYPE sexo_tipo           AS ENUM ('feminino', 'masculino', 'outro', 'nao_informado');
 CREATE TYPE tipo_sanguineo_tipo AS ENUM ('A+','A-','B+','B-','AB+','AB-','O+','O-','nao_sei');
 
--- ---------------------------------------------------------------- usuario
+-- ---------------------------------------------------------------- user
 CREATE TABLE usuario (
     id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email         VARCHAR(255) NOT NULL UNIQUE,
@@ -17,8 +17,8 @@ CREATE TABLE usuario (
     atualizado_em TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
 
--- ----------------------------------------------------------------- perfil
--- Relação 1:1 com usuario, garantida pelo UNIQUE em usuario_id
+-- ----------------------------------------------------------------- profile
+-- One-to-one relationship with user, enforced by UNIQUE on usuario_id
 CREATE TABLE perfil (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     usuario_id          UUID NOT NULL UNIQUE
@@ -27,7 +27,7 @@ CREATE TABLE perfil (
     sobrenome           VARCHAR(100) NOT NULL,
     sexo                sexo_tipo           NOT NULL DEFAULT 'nao_informado',
     tipo_sanguineo      tipo_sanguineo_tipo NOT NULL DEFAULT 'nao_sei',
-    slug_publico        UUID NOT NULL UNIQUE DEFAULT gen_random_uuid(), -- aleatório: evita enumeração
+    slug_publico        UUID NOT NULL UNIQUE DEFAULT gen_random_uuid(), -- random: prevents enumeration
     senha_publica_hash  VARCHAR(72) NOT NULL,     -- distinta da senha da conta (RF05)
     ativo               BOOLEAN     NOT NULL DEFAULT TRUE,
     bloqueado_ate       TIMESTAMPTZ,              -- bloqueio por tentativas (RF09)
@@ -36,7 +36,7 @@ CREATE TABLE perfil (
 );
 CREATE INDEX idx_perfil_slug ON perfil(slug_publico);
 
--- --------------------------------------------------- contato_emergencia
+-- --------------------------------------------------- emergency_contact
 CREATE TABLE contato_emergencia (
     id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     perfil_id  UUID NOT NULL REFERENCES perfil(id) ON DELETE CASCADE,
@@ -47,9 +47,9 @@ CREATE TABLE contato_emergencia (
 );
 CREATE INDEX idx_contato_perfil ON contato_emergencia(perfil_id);
 
--- ------------------------------------------------------ listas clínicas
--- Normalizadas (3FN) em vez de campos de texto livre: permitem consulta,
--- contagem e exibição estruturada na página pública.
+-- ------------------------------------------------------ clinical lists
+-- Normalized (3NF) instead of free-text fields: enables querying,
+-- counting, and structured display on the public page.
 CREATE TABLE alergia (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     perfil_id   UUID NOT NULL REFERENCES perfil(id) ON DELETE CASCADE,
@@ -84,8 +84,8 @@ CREATE INDEX idx_medicamento_perfil ON medicamento(perfil_id);
 CREATE INDEX idx_doenca_perfil      ON doenca(perfil_id);
 CREATE INDEX idx_cirurgia_perfil    ON cirurgia(perfil_id);
 
--- ----------------------------------------------------- tentativa_acesso
--- Sustenta o bloqueio do RF09 e a trilha de auditoria exigida pela LGPD
+-- ----------------------------------------------------- access_attempt
+-- Supports RF09 lockout and the audit trail required by Brazil's LGPD
 CREATE TABLE tentativa_acesso (
     id         BIGSERIAL PRIMARY KEY,
     perfil_id  UUID NOT NULL REFERENCES perfil(id) ON DELETE CASCADE,

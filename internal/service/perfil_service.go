@@ -20,13 +20,13 @@ func NewPerfilService(pr *repository.PerfilRepo, ur *repository.UsuarioRepo) *Pe
 	return &PerfilService{perfilRepo: pr, usuarioRepo: ur}
 }
 
-// Buscar retorna o perfil completo do usuário autenticado (RF11).
+// Buscar returns the complete profile of the authenticated user (RF11).
 func (s *PerfilService) Buscar(ctx context.Context, usuarioID uuid.UUID) (*model.PerfilCompleto, error) {
 	return s.perfilRepo.BuscarPorUsuario(ctx, usuarioID)
 }
 
-// Salvar cria ou atualiza o perfil clínico (RF04, RF05, RF12).
-// A senha pública é distinta da senha da conta (RF05).
+// Salvar creates or updates the clinical profile (RF04, RF05, RF12).
+// The public password is different from the account password (RF05).
 func (s *PerfilService) Salvar(ctx context.Context, usuarioID uuid.UUID, req *model.PerfilRequest) (*model.PerfilCompleto, error) {
 	if req.Nome == "" || req.Sobrenome == "" {
 		return nil, errors.New("nome e sobrenome são obrigatórios")
@@ -38,7 +38,7 @@ func (s *PerfilService) Salvar(ctx context.Context, usuarioID uuid.UUID, req *mo
 		return nil, errors.New("senha pública deve ter no mínimo 4 caracteres")
 	}
 
-	// Verifica se senha pública ≠ senha da conta (RF05)
+	// Verify that the public password differs from the account password (RF05)
 	u, err := s.usuarioRepo.BuscarPorID(ctx, usuarioID)
 	if err != nil {
 		return nil, fmt.Errorf("buscar usuário: %w", err)
@@ -55,7 +55,7 @@ func (s *PerfilService) Salvar(ctx context.Context, usuarioID uuid.UUID, req *mo
 	return s.perfilRepo.SalvarOuAtualizar(ctx, usuarioID, req, string(hash))
 }
 
-// Excluir remove conta e todos os dados em cascata (RF10 + LGPD).
+// Excluir removes the account and all cascading data (RF10 + LGPD).
 func (s *PerfilService) Excluir(ctx context.Context, usuarioID uuid.UUID) error {
 	return s.usuarioRepo.Excluir(ctx, usuarioID)
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// ---------- Usuario ----------------------------------------------------------
+// ---------- User --------------------------------------------------------------
 
 type Usuario struct {
 	ID           uuid.UUID `json:"id"`
@@ -17,7 +17,7 @@ type Usuario struct {
 	AtualizadoEm time.Time `json:"atualizado_em"`
 }
 
-// ---------- Perfil -----------------------------------------------------------
+// ---------- Profile -----------------------------------------------------------
 
 type SexoTipo string
 type TipoSanguineoTipo string
@@ -44,7 +44,7 @@ type Perfil struct {
 	AtualizadoEm    time.Time          `json:"atualizado_em"`
 }
 
-// ---------- Dados clínicos ---------------------------------------------------
+// ---------- Clinical data -----------------------------------------------------
 
 type ContatoEmergencia struct {
 	ID        uuid.UUID `json:"id"`
@@ -84,7 +84,7 @@ type Cirurgia struct {
 	AnoRealizacao *int16   `json:"ano_realizacao,omitempty"`
 }
 
-// ---------- Perfil completo (retorno de API) ---------------------------------
+// ---------- Complete profile (API response) -----------------------------------
 
 type PerfilCompleto struct {
 	Perfil
@@ -95,7 +95,7 @@ type PerfilCompleto struct {
 	Cirurgias   []Cirurgia          `json:"cirurgias"`
 }
 
-// ---------- Requisições ------------------------------------------------------
+// ---------- Requests ----------------------------------------------------------
 
 type RegistroRequest struct {
 	Email         string `json:"email"`
@@ -153,7 +153,7 @@ type AcessoPublicoRequest struct {
 	Senha string `json:"senha"`
 }
 
-// ---------- Respostas --------------------------------------------------------
+// ---------- Responses ---------------------------------------------------------
 
 type TokenResponse struct {
 	Token string `json:"token"`

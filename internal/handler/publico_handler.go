@@ -20,7 +20,7 @@ func NewPublicoHandler(svc *service.PublicoService) *PublicoHandler {
 	return &PublicoHandler{publicoSvc: svc}
 }
 
-// POST /api/v1/publico/{slug} — valida senha e retorna dados clínicos (RF08, RF09)
+// POST /api/v1/publico/{slug} — validates the password and returns clinical data (RF08, RF09)
 func (h *PublicoHandler) AcessarPerfil(w http.ResponseWriter, r *http.Request) {
 	slug := chi.URLParam(r, "slug")
 	if slug == "" {

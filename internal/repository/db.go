@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// NewPool cria um pool de conexões PostgreSQL a partir da variável DATABASE_URL.
+// NewPool creates a PostgreSQL connection pool from the DATABASE_URL variable.
 func NewPool(ctx context.Context) (*pgxpool.Pool, error) {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {

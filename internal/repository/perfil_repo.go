@@ -20,7 +20,7 @@ func NewPerfilRepo(db *pgxpool.Pool) *PerfilRepo {
 	return &PerfilRepo{db: db}
 }
 
-// BuscarPorUsuario retorna o perfil completo do usuário.
+// BuscarPorUsuario returns the user's complete profile.
 func (r *PerfilRepo) BuscarPorUsuario(ctx context.Context, usuarioID uuid.UUID) (*model.PerfilCompleto, error) {
 	p := &model.PerfilCompleto{}
 	err := r.db.QueryRow(ctx,
@@ -48,7 +48,7 @@ func (r *PerfilRepo) BuscarPorUsuario(ctx context.Context, usuarioID uuid.UUID) 
 	return p, nil
 }
 
-// BuscarPorSlug retorna o perfil pelo slug público (para acesso de emergência).
+// BuscarPorSlug returns a profile by public slug (for emergency access).
 func (r *PerfilRepo) BuscarPorSlug(ctx context.Context, slug uuid.UUID) (*model.PerfilCompleto, error) {
 	p := &model.PerfilCompleto{}
 	err := r.db.QueryRow(ctx,
@@ -76,7 +76,7 @@ func (r *PerfilRepo) BuscarPorSlug(ctx context.Context, slug uuid.UUID) (*model.
 	return p, nil
 }
 
-// SalvarOuAtualizar cria ou substitui o perfil e todos os dados clínicos dentro de uma transação.
+// SalvarOuAtualizar creates or replaces the profile and all clinical data in a transaction.
 func (r *PerfilRepo) SalvarOuAtualizar(ctx context.Context, usuarioID uuid.UUID, req *model.PerfilRequest, senhaPublicaHash string) (*model.PerfilCompleto, error) {
 	tx, err := r.db.Begin(ctx)
 	if err != nil {
@@ -84,7 +84,7 @@ func (r *PerfilRepo) SalvarOuAtualizar(ctx context.Context, usuarioID uuid.UUID,
 	}
 	defer tx.Rollback(ctx)
 
-	// Upsert do perfil principal
+	// Upsert the main profile
 	p := &model.PerfilCompleto{}
 	err = tx.QueryRow(ctx,
 		`INSERT INTO perfil (usuario_id, nome, sobrenome, sexo, tipo_sanguineo, senha_publica_hash)
@@ -110,7 +110,7 @@ func (r *PerfilRepo) SalvarOuAtualizar(ctx context.Context, usuarioID uuid.UUID,
 		return nil, fmt.Errorf("upsert perfil: %w", err)
 	}
 
-	// Apaga e recria dados clínicos (substituição total — RF12)
+	// Delete and recreate clinical data (full replacement — RF12)
 	tables := []string{"contato_emergencia", "alergia", "medicamento", "doenca", "cirurgia"}
 	for _, t := range tables {
 		if _, err := tx.Exec(ctx, fmt.Sprintf("DELETE FROM %s WHERE perfil_id = $1", t), p.ID); err != nil {
@@ -118,7 +118,7 @@ func (r *PerfilRepo) SalvarOuAtualizar(ctx context.Context, usuarioID uuid.UUID,
 		}
 	}
 
-	// Contatos
+	// Emergency contacts
 	for _, c := range req.Contatos {
 		if _, err := tx.Exec(ctx,
 			`INSERT INTO contato_emergencia (perfil_id, nome, parentesco, telefone, principal)
@@ -129,7 +129,7 @@ func (r *PerfilRepo) SalvarOuAtualizar(ctx context.Context, usuarioID uuid.UUID,
 		}
 	}
 
-	// Alergias
+	// Allergies
 	for _, a := range req.Alergias {
 		if _, err := tx.Exec(ctx,
 			`INSERT INTO alergia (perfil_id, descricao, gravidade) VALUES ($1,$2,$3)`,
@@ -139,7 +139,7 @@ func (r *PerfilRepo) SalvarOuAtualizar(ctx context.Context, usuarioID uuid.UUID,
 		}
 	}
 
-	// Medicamentos
+	// Medications
 	for _, m := range req.Medicamentos {
 		if _, err := tx.Exec(ctx,
 			`INSERT INTO medicamento (perfil_id, nome, dosagem, frequencia) VALUES ($1,$2,$3,$4)`,
@@ -149,7 +149,7 @@ func (r *PerfilRepo) SalvarOuAtualizar(ctx context.Context, usuarioID uuid.UUID,
 		}
 	}
 
-	// Doenças
+	// Conditions
 	for _, d := range req.Doencas {
 		if _, err := tx.Exec(ctx,
 			`INSERT INTO doenca (perfil_id, descricao, observacao) VALUES ($1,$2,$3)`,
@@ -159,7 +159,7 @@ func (r *PerfilRepo) SalvarOuAtualizar(ctx context.Context, usuarioID uuid.UUID,
 		}
 	}
 
-	// Cirurgias
+	// Surgeries
 	for _, c := range req.Cirurgias {
 		if _, err := tx.Exec(ctx,
 			`INSERT INTO cirurgia (perfil_id, descricao, ano_realizacao) VALUES ($1,$2,$3)`,
@@ -173,14 +173,14 @@ func (r *PerfilRepo) SalvarOuAtualizar(ctx context.Context, usuarioID uuid.UUID,
 		return nil, fmt.Errorf("commit: %w", err)
 	}
 
-	// Recarregar dados clínicos para o retorno
+	// Reload clinical data for the response
 	if err := r.carregarDadosClinico(ctx, p); err != nil {
 		return nil, err
 	}
 	return p, nil
 }
 
-// RegistrarTentativa registra uma tentativa de acesso público (RF09 / LGPD).
+// RegistrarTentativa records a public-access attempt (RF09 / LGPD).
 func (r *PerfilRepo) RegistrarTentativa(ctx context.Context, perfilID uuid.UUID, ip string, sucesso bool) error {
 	_, err := r.db.Exec(ctx,
 		`INSERT INTO tentativa_acesso (perfil_id, ip, sucesso) VALUES ($1, $2::inet, $3)`,
@@ -189,7 +189,7 @@ func (r *PerfilRepo) RegistrarTentativa(ctx context.Context, perfilID uuid.UUID,
 	return err
 }
 
-// ContarFalhasRecentes conta tentativas falhas nos últimos 15 minutos (RF09).
+// ContarFalhasRecentes counts failed attempts in the last 15 minutes (RF09).
 func (r *PerfilRepo) ContarFalhasRecentes(ctx context.Context, perfilID uuid.UUID) (int, error) {
 	var count int
 	err := r.db.QueryRow(ctx,
@@ -200,7 +200,7 @@ func (r *PerfilRepo) ContarFalhasRecentes(ctx context.Context, perfilID uuid.UUI
 	return count, err
 }
 
-// Bloquear define bloqueado_ate para o perfil (RF09).
+// Bloquear sets bloqueado_ate for the profile (RF09).
 func (r *PerfilRepo) Bloquear(ctx context.Context, perfilID uuid.UUID, ate time.Time) error {
 	_, err := r.db.Exec(ctx,
 		`UPDATE perfil SET bloqueado_ate = $1 WHERE id = $2`,
@@ -209,10 +209,10 @@ func (r *PerfilRepo) Bloquear(ctx context.Context, perfilID uuid.UUID, ate time.
 	return err
 }
 
-// ---------- helpers internos --------------------------------------------------
+// ---------- internal helpers --------------------------------------------------
 
 func (r *PerfilRepo) carregarDadosClinico(ctx context.Context, p *model.PerfilCompleto) error {
-	// Contatos
+	// Emergency contacts
 	rows, err := r.db.Query(ctx,
 		`SELECT id, perfil_id, nome, COALESCE(parentesco,''), telefone, principal
 		 FROM contato_emergencia WHERE perfil_id = $1`, p.ID)
@@ -228,7 +228,7 @@ func (r *PerfilRepo) carregarDadosClinico(ctx context.Context, p *model.PerfilCo
 		p.Contatos = append(p.Contatos, c)
 	}
 
-	// Alergias
+	// Allergies
 	aRows, err := r.db.Query(ctx,
 		`SELECT id, perfil_id, descricao, COALESCE(gravidade,'') FROM alergia WHERE perfil_id = $1`, p.ID)
 	if err != nil {
@@ -243,7 +243,7 @@ func (r *PerfilRepo) carregarDadosClinico(ctx context.Context, p *model.PerfilCo
 		p.Alergias = append(p.Alergias, a)
 	}
 
-	// Medicamentos
+	// Medications
 	mRows, err := r.db.Query(ctx,
 		`SELECT id, perfil_id, nome, COALESCE(dosagem,''), COALESCE(frequencia,'')
 		 FROM medicamento WHERE perfil_id = $1`, p.ID)
@@ -259,7 +259,7 @@ func (r *PerfilRepo) carregarDadosClinico(ctx context.Context, p *model.PerfilCo
 		p.Medicamentos = append(p.Medicamentos, m)
 	}
 
-	// Doenças
+	// Conditions
 	dRows, err := r.db.Query(ctx,
 		`SELECT id, perfil_id, descricao, COALESCE(observacao,'') FROM doenca WHERE perfil_id = $1`, p.ID)
 	if err != nil {
@@ -274,7 +274,7 @@ func (r *PerfilRepo) carregarDadosClinico(ctx context.Context, p *model.PerfilCo
 		p.Doencas = append(p.Doencas, d)
 	}
 
-	// Cirurgias
+	// Surgeries
 	cRows, err := r.db.Query(ctx,
 		`SELECT id, perfil_id, descricao, ano_realizacao FROM cirurgia WHERE perfil_id = $1`, p.ID)
 	if err != nil {
@@ -289,7 +289,7 @@ func (r *PerfilRepo) carregarDadosClinico(ctx context.Context, p *model.PerfilCo
 		p.Cirurgias = append(p.Cirurgias, c)
 	}
 
-	// Garantir slices não nulos no JSON
+	// Ensure slices are not null in JSON
 	if p.Contatos == nil {
 		p.Contatos = []model.ContatoEmergencia{}
 	}

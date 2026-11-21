@@ -22,7 +22,7 @@ func NewUsuarioRepo(db *pgxpool.Pool) *UsuarioRepo {
 	return &UsuarioRepo{db: db}
 }
 
-// Criar insere um novo usuário. A senha já deve chegar como hash bcrypt.
+// Criar inserts a new user. The password must already be a bcrypt hash.
 func (r *UsuarioRepo) Criar(ctx context.Context, email, senhaHash string, consentimento bool) (*model.Usuario, error) {
 	u := &model.Usuario{}
 	err := r.db.QueryRow(ctx,
@@ -40,7 +40,7 @@ func (r *UsuarioRepo) Criar(ctx context.Context, email, senhaHash string, consen
 	return u, nil
 }
 
-// BuscarPorEmail retorna o usuário com a senha_hash (para verificação).
+// BuscarPorEmail returns the user with senha_hash (for verification).
 func (r *UsuarioRepo) BuscarPorEmail(ctx context.Context, email string) (*model.Usuario, error) {
 	u := &model.Usuario{}
 	err := r.db.QueryRow(ctx,
@@ -57,7 +57,7 @@ func (r *UsuarioRepo) BuscarPorEmail(ctx context.Context, email string) (*model.
 	return u, nil
 }
 
-// BuscarPorID retorna um usuário pelo UUID.
+// BuscarPorID returns a user by UUID.
 func (r *UsuarioRepo) BuscarPorID(ctx context.Context, id uuid.UUID) (*model.Usuario, error) {
 	u := &model.Usuario{}
 	err := r.db.QueryRow(ctx,
@@ -74,7 +74,8 @@ func (r *UsuarioRepo) BuscarPorID(ctx context.Context, id uuid.UUID) (*model.Usu
 	return u, nil
 }
 
-// Excluir remove o usuário em cascata (perfil + dados clínicos via ON DELETE CASCADE).
+// Excluir removes the user and cascades to the profile and clinical data
+// through ON DELETE CASCADE.
 func (r *UsuarioRepo) Excluir(ctx context.Context, id uuid.UUID) error {
 	ct, err := r.db.Exec(ctx, `DELETE FROM usuario WHERE id = $1`, id)
 	if err != nil {

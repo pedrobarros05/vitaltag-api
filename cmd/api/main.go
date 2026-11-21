@@ -18,12 +18,12 @@ import (
 )
 
 func main() {
-	// Carrega .env em desenvolvimento (ignorado em prod quando as vars já estão setadas)
+	// Load .env in development (ignored in production when variables are already set)
 	_ = godotenv.Load()
 
 	ctx := context.Background()
 
-	// Pool de conexões
+	// Connection pool
 	pool, err := repository.NewPool(ctx)
 	if err != nil {
 		log.Fatalf("banco de dados: %v", err)
@@ -31,11 +31,11 @@ func main() {
 	defer pool.Close()
 	log.Println("✅  Conectado ao PostgreSQL")
 
-	// Repositórios
+	// Repositories
 	usuarioRepo := repository.NewUsuarioRepo(pool)
 	perfilRepo := repository.NewPerfilRepo(pool)
 
-	// Serviços
+	// Services
 	authSvc := service.NewAuthService(usuarioRepo)
 	perfilSvc := service.NewPerfilService(perfilRepo, usuarioRepo)
 	publicoSvc := service.NewPublicoService(perfilRepo)
@@ -52,12 +52,12 @@ func main() {
 	r.Use(chiMiddleware.Recoverer)
 	r.Use(corsMiddleware)
 
-	// Rotas públicas
+	// Public routes
 	r.Post("/api/v1/auth/registro", authH.Registro)
 	r.Post("/api/v1/auth/login", authH.Login)
 	r.Post("/api/v1/publico/{slug}", publicoH.AcessarPerfil)
 
-	// GET público do perfil (para o frontend carregar sem senha)
+	// Public profile GET (allows the frontend to load without a password)
 	r.Get("/api/v1/publico/{slug}", func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"erro":"use POST com a senha"}`, http.StatusMethodNotAllowed)
 	})

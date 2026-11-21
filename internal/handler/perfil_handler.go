@@ -20,7 +20,7 @@ func NewPerfilHandler(ps *service.PerfilService, qs *service.QRCodeService) *Per
 	return &PerfilHandler{perfilSvc: ps, qrCodeSvc: qs}
 }
 
-// GET /api/v1/perfil — retorna o perfil do usuário autenticado (RF11)
+// GET /api/v1/perfil — returns the authenticated user's profile (RF11)
 func (h *PerfilHandler) Buscar(w http.ResponseWriter, r *http.Request) {
 	uid, ok := middleware.UsuarioIDDoContexto(r.Context())
 	if !ok {
@@ -38,12 +38,12 @@ func (h *PerfilHandler) Buscar(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Não expor o hash da senha pública
+	// Do not expose the public-password hash
 	perfil.SenhaPublicaHash = ""
 	responderJSON(w, http.StatusOK, perfil)
 }
 
-// POST /api/v1/perfil — cria/atualiza perfil clínico (RF04, RF05, RF12)
+// POST /api/v1/perfil — creates or updates the clinical profile (RF04, RF05, RF12)
 func (h *PerfilHandler) SalvarOuAtualizar(w http.ResponseWriter, r *http.Request) {
 	uid, ok := middleware.UsuarioIDDoContexto(r.Context())
 	if !ok {
@@ -67,7 +67,7 @@ func (h *PerfilHandler) SalvarOuAtualizar(w http.ResponseWriter, r *http.Request
 	responderJSON(w, http.StatusOK, perfil)
 }
 
-// GET /api/v1/perfil/qrcode — devolve QR Code em PNG (RF06)
+// GET /api/v1/perfil/qrcode — returns the QR Code as a PNG (RF06)
 func (h *PerfilHandler) QRCode(w http.ResponseWriter, r *http.Request) {
 	uid, ok := middleware.UsuarioIDDoContexto(r.Context())
 	if !ok {
@@ -86,7 +86,7 @@ func (h *PerfilHandler) QRCode(w http.ResponseWriter, r *http.Request) {
 	w.Write(png)
 }
 
-// DELETE /api/v1/perfil — exclui conta e todos os dados (RF10)
+// DELETE /api/v1/perfil — deletes the account and all data (RF10)
 func (h *PerfilHandler) Excluir(w http.ResponseWriter, r *http.Request) {
 	uid, ok := middleware.UsuarioIDDoContexto(r.Context())
 	if !ok {

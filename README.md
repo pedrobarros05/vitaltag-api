@@ -1,37 +1,36 @@
 # VitalTag — API
 
-Backend do **VitalTag**, sistema para compartilhamento de informações clínicas em situações de
-emergência no ambiente de trabalho. O trabalhador cadastra suas informações clínicas e recebe um
-QR Code com o link para uma página pública protegida por senha impressa junto ao código.
+Backend for **VitalTag**, a system for sharing clinical information in workplace emergency
+situations. Workers register their clinical information and receive a QR Code containing a link to
+a password-protected public page. The password is printed alongside the code.
 
-Projeto da **Disciplina Integradora de Desenvolvimento de Projetos** — Análise e Desenvolvimento
-de Sistemas.
+Project for the **Integrated Project Development Course** — Systems Analysis and Development.
 
-Frontend: **vitaltag-web** (repositório separado).
+Frontend: **vitaltag-web** (separate repository).
 
 ## Stack
 
-- **Go 1.23** — API REST
-- **chi** — roteamento e middlewares
-- **pgx** — driver PostgreSQL
-- **PostgreSQL 16** — banco de dados
-- **golang-jwt** — tokens de sessão · **bcrypt** — hash de senhas
-- **skip2/go-qrcode** — geração do QR Code
-- **golang-migrate** — versionamento do schema
+- **Go 1.23** — REST API
+- **chi** — routing and middleware
+- **pgx** — PostgreSQL driver
+- **PostgreSQL 16** — database
+- **golang-jwt** — session tokens · **bcrypt** — password hashing
+- **skip2/go-qrcode** — QR Code generation
+- **golang-migrate** — schema versioning
 
-## Arquitetura
+## Architecture
 
 ```
-cmd/api           ponto de entrada
-internal/handler      camada HTTP: rotas, parsing e validação de entrada
-internal/service      regras de negócio (senhas distintas, bloqueio, exclusão em cascata)
-internal/repository   acesso ao PostgreSQL
-internal/model        entidades do domínio
-internal/middleware   autenticação JWT, rate limit, logs
-migrations            scripts de schema versionados
+cmd/api               entry point
+internal/handler      HTTP layer: routing, parsing, and input validation
+internal/service      business rules (separate passwords, lockout, cascading deletion)
+internal/repository   PostgreSQL access
+internal/model        domain entities
+internal/middleware   JWT authentication, rate limiting, and logging
+migrations            versioned schema scripts
 ```
 
-## Como rodar (Fase 2)
+## Running locally (Phase 2)
 
 ```bash
 cp .env.example .env
@@ -40,19 +39,19 @@ migrate -path migrations -database "$DATABASE_URL" up
 go run ./cmd/api
 ```
 
-## Endpoints previstos
+## Planned endpoints
 
-| Método | Rota | Descrição |
+| Method | Route | Description |
 |---|---|---|
-| POST | `/api/v1/auth/registro` | cria conta (RF01) |
-| POST | `/api/v1/auth/login` | autentica e emite token (RF02) |
-| GET | `/api/v1/perfil` | retorna o perfil do usuário autenticado (RF11) |
-| POST | `/api/v1/perfil` | cria/atualiza informações clínicas (RF04, RF05, RF12) |
-| GET | `/api/v1/perfil/qrcode` | devolve o QR Code em PNG/SVG (RF06) |
-| DELETE | `/api/v1/perfil` | exclui o registro completo (RF10) |
-| POST | `/api/v1/publico/{slug}` | valida a senha pública e retorna os dados (RF08, RF09) |
+| POST | `/api/v1/auth/registro` | creates an account (RF01) |
+| POST | `/api/v1/auth/login` | authenticates and issues a token (RF02) |
+| GET | `/api/v1/perfil` | returns the authenticated user's profile (RF11) |
+| POST | `/api/v1/perfil` | creates or updates clinical information (RF04, RF05, RF12) |
+| GET | `/api/v1/perfil/qrcode` | returns the QR Code as PNG/SVG (RF06) |
+| DELETE | `/api/v1/perfil` | deletes the complete record (RF10) |
+| POST | `/api/v1/publico/{slug}` | validates the public password and returns the data (RF08, RF09) |
 
-## Documentação
+## Documentation
 
-A modelagem completa (requisitos, User Stories, EAP, roadmap, protótipo e modelo de dados) está
-na entrega da Fase 1 da disciplina.
+The complete design (requirements, user stories, work breakdown structure, roadmap, prototype,
+and data model) is included in the Phase 1 course deliverable.

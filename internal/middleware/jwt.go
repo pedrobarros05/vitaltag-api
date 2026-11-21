@@ -14,7 +14,7 @@ type contextKey string
 
 const UsuarioIDKey contextKey = "usuario_id"
 
-// JWT extrai e valida o Bearer token, injetando o usuarioID no contexto.
+// JWT extracts and validates the Bearer token, injecting usuarioID into the context.
 func JWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		auth := r.Header.Get("Authorization")
@@ -35,7 +35,7 @@ func JWT(next http.Handler) http.Handler {
 	})
 }
 
-// UsuarioIDDoContexto extrai o ID do usuário autenticado.
+// UsuarioIDDoContexto extracts the authenticated user's ID.
 func UsuarioIDDoContexto(ctx context.Context) (uuid.UUID, bool) {
 	id, ok := ctx.Value(UsuarioIDKey).(uuid.UUID)
 	return id, ok
