@@ -5,7 +5,7 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: vitaltag
-      POSTGRES_PASSWORD: senha
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: vitaltag
     ports:
       - "5432:5432"

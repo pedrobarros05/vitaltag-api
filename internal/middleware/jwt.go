@@ -12,37 +12,37 @@ import (
 
 type contextKey string
 
-const UsuarioIDKey contextKey = "usuario_id"
+const UserIDKey contextKey = "user_id"
 
-// JWT extracts and validates the Bearer token, injecting usuarioID into the context.
+// JWT extracts and validates the Bearer token, injecting userID into the context.
 func JWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		auth := r.Header.Get("Authorization")
 		if !strings.HasPrefix(auth, "Bearer ") {
-			responderErro(w, http.StatusUnauthorized, "token ausente ou mal formado")
+			respondError(w, http.StatusUnauthorized, "missing or malformed token")
 			return
 		}
 
 		tokenStr := strings.TrimPrefix(auth, "Bearer ")
-		claims, err := service.ValidarJWT(tokenStr)
+		claims, err := service.ValidateJWT(tokenStr)
 		if err != nil {
-			responderErro(w, http.StatusUnauthorized, "token inválido ou expirado")
+			respondError(w, http.StatusUnauthorized, "invalid or expired token")
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), UsuarioIDKey, claims.UsuarioID)
+		ctx := context.WithValue(r.Context(), UserIDKey, claims.UserID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
-// UsuarioIDDoContexto extracts the authenticated user's ID.
-func UsuarioIDDoContexto(ctx context.Context) (uuid.UUID, bool) {
-	id, ok := ctx.Value(UsuarioIDKey).(uuid.UUID)
+// UserIDFromContext extracts the authenticated user's ID.
+func UserIDFromContext(ctx context.Context) (uuid.UUID, bool) {
+	id, ok := ctx.Value(UserIDKey).(uuid.UUID)
 	return id, ok
 }
 
-func responderErro(w http.ResponseWriter, status int, msg string) {
+func respondError(w http.ResponseWriter, status int, msg string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(map[string]string{"erro": msg})
+	json.NewEncoder(w).Encode(map[string]string{"error": msg})
 }
