@@ -1,235 +1,63 @@
-# github.com/davecgh/go-spew v1.1.1
-## explicit; go 1.13
-github.com/davecgh/go-spew/spew
-github.com/davecgh/go-spew/spew/testdata
-# github.com/go-chi/chi/v5 v5.2.1
-## explicit; go 1.22.0
+# github.com/go-chi/chi/v5 v5.2.2
+## explicit; go 1.20
 github.com/go-chi/chi/v5
-github.com/go-chi/chi/v5/_examples/custom-handler
-github.com/go-chi/chi/v5/_examples/custom-method
-github.com/go-chi/chi/v5/_examples/fileserver
-github.com/go-chi/chi/v5/_examples/graceful
-github.com/go-chi/chi/v5/_examples/hello-world
-github.com/go-chi/chi/v5/_examples/limits
-github.com/go-chi/chi/v5/_examples/logging
-github.com/go-chi/chi/v5/_examples/router-walk
-github.com/go-chi/chi/v5/_examples/todos-resource
 github.com/go-chi/chi/v5/middleware
-# github.com/golang-jwt/jwt/v5 v5.2.1
+# github.com/golang-jwt/jwt/v5 v5.2.2
 ## explicit; go 1.18
 github.com/golang-jwt/jwt/v5
-github.com/golang-jwt/jwt/v5/cmd/jwt
-github.com/golang-jwt/jwt/v5/request
-github.com/golang-jwt/jwt/v5/test
 # github.com/google/uuid v1.6.0
 ## explicit
 github.com/google/uuid
 # github.com/jackc/pgpassfile v1.0.0
-## explicit
+## explicit; go 1.12
 github.com/jackc/pgpassfile
 # github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761
-## explicit; go 1.20
+## explicit; go 1.14
 github.com/jackc/pgservicefile
-# github.com/jackc/pgx/v5 v5.7.2
-## explicit; go 1.21
+# github.com/jackc/pgx/v5 v5.9.2
+## explicit; go 1.25.0
 github.com/jackc/pgx/v5
-github.com/jackc/pgx/v5/examples/chat
-github.com/jackc/pgx/v5/examples/todo
-github.com/jackc/pgx/v5/examples/url_shortener
 github.com/jackc/pgx/v5/internal/iobufpool
 github.com/jackc/pgx/v5/internal/pgio
-github.com/jackc/pgx/v5/internal/pgmock
 github.com/jackc/pgx/v5/internal/sanitize
 github.com/jackc/pgx/v5/internal/stmtcache
-github.com/jackc/pgx/v5/log/testingadapter
-github.com/jackc/pgx/v5/multitracer
 github.com/jackc/pgx/v5/pgconn
 github.com/jackc/pgx/v5/pgconn/ctxwatch
 github.com/jackc/pgx/v5/pgconn/internal/bgreader
 github.com/jackc/pgx/v5/pgproto3
-github.com/jackc/pgx/v5/pgproto3/example/pgfortune
 github.com/jackc/pgx/v5/pgtype
-github.com/jackc/pgx/v5/pgtype/zeronull
 github.com/jackc/pgx/v5/pgxpool
-github.com/jackc/pgx/v5/pgxtest
-github.com/jackc/pgx/v5/stdlib
-github.com/jackc/pgx/v5/testsetup
-github.com/jackc/pgx/v5/tracelog
 # github.com/jackc/puddle/v2 v2.2.2
 ## explicit; go 1.19
 github.com/jackc/puddle/v2
 github.com/jackc/puddle/v2/internal/genstack
 # github.com/joho/godotenv v1.5.1
-## explicit; go 1.17
+## explicit; go 1.12
 github.com/joho/godotenv
-github.com/joho/godotenv/autoload
-github.com/joho/godotenv/cmd/godotenv
-# github.com/pmezard/go-difflib v1.0.0
-## explicit
-github.com/pmezard/go-difflib/difflib
 # github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
-## explicit
+## explicit; go 1.13
 github.com/skip2/go-qrcode
 github.com/skip2/go-qrcode/bitset
-github.com/skip2/go-qrcode/qrcode
 github.com/skip2/go-qrcode/reedsolomon
-# github.com/stretchr/testify v1.7.0
-## explicit; go 1.13
-github.com/stretchr/testify
-github.com/stretchr/testify/_codegen
-github.com/stretchr/testify/assert
-github.com/stretchr/testify/http
-github.com/stretchr/testify/mock
-github.com/stretchr/testify/require
-github.com/stretchr/testify/suite
 # golang.org/x/crypto v0.31.0
 ## explicit; go 1.20
-golang.org/x/crypto/acme
-golang.org/x/crypto/acme/autocert
-golang.org/x/crypto/acme/autocert/internal/acmetest
-golang.org/x/crypto/acme/internal/acmeprobe
-golang.org/x/crypto/argon2
-golang.org/x/crypto/argon2/_asm
 golang.org/x/crypto/bcrypt
-golang.org/x/crypto/blake2b
-golang.org/x/crypto/blake2b/_asm/AVX2
-golang.org/x/crypto/blake2b/_asm/standard
-golang.org/x/crypto/blake2s
-golang.org/x/crypto/blake2s/_asm
 golang.org/x/crypto/blowfish
-golang.org/x/crypto/bn256
-golang.org/x/crypto/cast5
-golang.org/x/crypto/chacha20
-golang.org/x/crypto/chacha20poly1305
-golang.org/x/crypto/chacha20poly1305/_asm
-golang.org/x/crypto/cryptobyte
-golang.org/x/crypto/cryptobyte/asn1
-golang.org/x/crypto/curve25519
-golang.org/x/crypto/ed25519
-golang.org/x/crypto/hkdf
-golang.org/x/crypto/internal/alias
-golang.org/x/crypto/internal/poly1305
-golang.org/x/crypto/internal/poly1305/_asm
-golang.org/x/crypto/internal/testenv
-golang.org/x/crypto/internal/wycheproof
-golang.org/x/crypto/internal/wycheproof/internal/dsa
-golang.org/x/crypto/md4
-golang.org/x/crypto/nacl/auth
-golang.org/x/crypto/nacl/box
-golang.org/x/crypto/nacl/secretbox
-golang.org/x/crypto/nacl/sign
-golang.org/x/crypto/ocsp
-golang.org/x/crypto/openpgp
-golang.org/x/crypto/openpgp/armor
-golang.org/x/crypto/openpgp/clearsign
-golang.org/x/crypto/openpgp/elgamal
-golang.org/x/crypto/openpgp/errors
-golang.org/x/crypto/openpgp/packet
-golang.org/x/crypto/openpgp/s2k
-golang.org/x/crypto/otr
-golang.org/x/crypto/pbkdf2
-golang.org/x/crypto/pkcs12
-golang.org/x/crypto/pkcs12/internal/rc2
-golang.org/x/crypto/poly1305
-golang.org/x/crypto/ripemd160
-golang.org/x/crypto/salsa20
-golang.org/x/crypto/salsa20/salsa
-golang.org/x/crypto/salsa20/salsa/_asm
-golang.org/x/crypto/scrypt
-golang.org/x/crypto/sha3
-golang.org/x/crypto/sha3/_asm
-golang.org/x/crypto/ssh
-golang.org/x/crypto/ssh/agent
-golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
-golang.org/x/crypto/ssh/knownhosts
-golang.org/x/crypto/ssh/terminal
-golang.org/x/crypto/ssh/test
-golang.org/x/crypto/ssh/testdata
-golang.org/x/crypto/tea
-golang.org/x/crypto/twofish
-golang.org/x/crypto/x509roots
-golang.org/x/crypto/x509roots/fallback
-golang.org/x/crypto/x509roots/nss
-golang.org/x/crypto/xtea
-golang.org/x/crypto/xts
-# golang.org/x/sync v0.10.0
-## explicit; go 1.18
-golang.org/x/sync/errgroup
+# golang.org/x/sync v0.22.0
+## explicit; go 1.25.0
 golang.org/x/sync/semaphore
-golang.org/x/sync/singleflight
-golang.org/x/sync/syncmap
-# golang.org/x/text v0.21.0
-## explicit; go 1.18
-golang.org/x/text
+# golang.org/x/text v0.41.0
+## explicit; go 1.25.0
 golang.org/x/text/cases
-golang.org/x/text/cmd/gotext
-golang.org/x/text/cmd/gotext/examples/extract
-golang.org/x/text/cmd/gotext/examples/extract_http
-golang.org/x/text/cmd/gotext/examples/extract_http/pkg
-golang.org/x/text/cmd/gotext/examples/rewrite
-golang.org/x/text/collate
-golang.org/x/text/collate/build
-golang.org/x/text/collate/tools/colcmp
-golang.org/x/text/currency
-golang.org/x/text/date
-golang.org/x/text/encoding
-golang.org/x/text/encoding/charmap
-golang.org/x/text/encoding/htmlindex
-golang.org/x/text/encoding/ianaindex
-golang.org/x/text/encoding/internal
-golang.org/x/text/encoding/internal/enctest
-golang.org/x/text/encoding/internal/identifier
-golang.org/x/text/encoding/japanese
-golang.org/x/text/encoding/korean
-golang.org/x/text/encoding/simplifiedchinese
-golang.org/x/text/encoding/traditionalchinese
-golang.org/x/text/encoding/unicode
-golang.org/x/text/encoding/unicode/utf32
-golang.org/x/text/feature/plural
 golang.org/x/text/internal
-golang.org/x/text/internal/catmsg
-golang.org/x/text/internal/cldrtree
-golang.org/x/text/internal/cldrtree/testdata/test1
-golang.org/x/text/internal/cldrtree/testdata/test2
-golang.org/x/text/internal/colltab
-golang.org/x/text/internal/export/idna
-golang.org/x/text/internal/export/unicode
-golang.org/x/text/internal/format
-golang.org/x/text/internal/gen
-golang.org/x/text/internal/gen/bitfield
 golang.org/x/text/internal/language
 golang.org/x/text/internal/language/compact
-golang.org/x/text/internal/number
-golang.org/x/text/internal/stringset
 golang.org/x/text/internal/tag
-golang.org/x/text/internal/testtext
-golang.org/x/text/internal/triegen
-golang.org/x/text/internal/ucd
-golang.org/x/text/internal/utf8internal
 golang.org/x/text/language
-golang.org/x/text/language/display
-golang.org/x/text/message
-golang.org/x/text/message/catalog
-golang.org/x/text/message/pipeline
-golang.org/x/text/message/pipeline/testdata/ssa
-golang.org/x/text/message/pipeline/testdata/test1
-golang.org/x/text/number
 golang.org/x/text/runes
-golang.org/x/text/search
-golang.org/x/text/secure
 golang.org/x/text/secure/bidirule
 golang.org/x/text/secure/precis
 golang.org/x/text/transform
-golang.org/x/text/unicode
 golang.org/x/text/unicode/bidi
-golang.org/x/text/unicode/cldr
 golang.org/x/text/unicode/norm
-golang.org/x/text/unicode/rangetable
-golang.org/x/text/unicode/runenames
 golang.org/x/text/width
-# gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405
-## explicit
-gopkg.in/check.v1
-# gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
-## explicit
-gopkg.in/yaml.v3

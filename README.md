@@ -10,7 +10,7 @@ Frontend: **vitaltag-web** (separate repository).
 
 ## Stack
 
-- **Go 1.23** — REST API
+- **Go 1.25+** — REST API
 - **chi** — routing and middleware
 - **pgx** — PostgreSQL driver
 - **PostgreSQL 16** — database
