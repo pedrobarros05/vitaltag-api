@@ -8,6 +8,8 @@ Project for the **Integrated Project Development Course** — Systems Analysis a
 
 Frontend: **vitaltag-web** (separate repository).
 
+License: [MIT License](LICENSE).
+
 ## Stack
 
 - **Go 1.26+** — REST API
