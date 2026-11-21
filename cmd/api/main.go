@@ -26,49 +26,49 @@ func main() {
 	// Connection pool
 	pool, err := repository.NewPool(ctx)
 	if err != nil {
-		log.Fatalf("banco de dados: %v", err)
+		log.Fatalf("database: %v", err)
 	}
 	defer pool.Close()
-	log.Println("✅  Conectado ao PostgreSQL")
+	log.Println("✅  Connected to PostgreSQL")
 
 	// Repositories
-	usuarioRepo := repository.NewUsuarioRepo(pool)
-	perfilRepo := repository.NewPerfilRepo(pool)
+	userRepo := repository.NewUserRepo(pool)
+	profileRepo := repository.NewProfileRepo(pool)
 
 	// Services
-	authSvc := service.NewAuthService(usuarioRepo)
-	perfilSvc := service.NewPerfilService(perfilRepo, usuarioRepo)
-	publicoSvc := service.NewPublicoService(perfilRepo)
-	qrCodeSvc := service.NewQRCodeService(perfilRepo)
+	authSvc := service.NewAuthService(userRepo)
+	profileSvc := service.NewProfileService(profileRepo, userRepo)
+	publicSvc := service.NewPublicService(profileRepo)
+	qrCodeSvc := service.NewQRCodeService(profileRepo)
 
 	// Handlers
 	authH := handler.NewAuthHandler(authSvc)
-	perfilH := handler.NewPerfilHandler(perfilSvc, qrCodeSvc)
-	publicoH := handler.NewPublicoHandler(publicoSvc)
+	profileH := handler.NewProfileHandler(profileSvc, qrCodeSvc)
+	publicH := handler.NewPublicHandler(publicSvc)
 
-	// Roteador
+	// Router
 	r := chi.NewRouter()
 	r.Use(chiMiddleware.Logger)
 	r.Use(chiMiddleware.Recoverer)
 	r.Use(corsMiddleware)
 
 	// Public routes
-	r.Post("/api/v1/auth/registro", authH.Registro)
+	r.Post("/api/v1/auth/register", authH.Register)
 	r.Post("/api/v1/auth/login", authH.Login)
-	r.Post("/api/v1/publico/{slug}", publicoH.AcessarPerfil)
+	r.Post("/api/v1/public/{slug}", publicH.AccessProfile)
 
 	// Public profile GET (allows the frontend to load without a password)
-	r.Get("/api/v1/publico/{slug}", func(w http.ResponseWriter, r *http.Request) {
-		http.Error(w, `{"erro":"use POST com a senha"}`, http.StatusMethodNotAllowed)
+	r.Get("/api/v1/public/{slug}", func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, `{"error":"use POST with the password"}`, http.StatusMethodNotAllowed)
 	})
 
-	// Rotas protegidas por JWT
+	// JWT-protected routes
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.JWT)
-		r.Get("/api/v1/perfil", perfilH.Buscar)
-		r.Post("/api/v1/perfil", perfilH.SalvarOuAtualizar)
-		r.Get("/api/v1/perfil/qrcode", perfilH.QRCode)
-		r.Delete("/api/v1/perfil", perfilH.Excluir)
+		r.Get("/api/v1/profile", profileH.Get)
+		r.Post("/api/v1/profile", profileH.Save)
+		r.Get("/api/v1/profile/qrcode", profileH.QRCode)
+		r.Delete("/api/v1/profile", profileH.Delete)
 	})
 
 	// Health check
@@ -90,13 +90,13 @@ func main() {
 		IdleTimeout:  60 * time.Second,
 	}
 
-	log.Printf("🚀  VitalTag API em http://localhost:%s", port)
+	log.Printf("🚀  VitalTag API at http://localhost:%s", port)
 	if err := srv.ListenAndServe(); err != nil {
-		log.Fatalf("servidor: %v", err)
+		log.Fatalf("server: %v", err)
 	}
 }
 
-// corsMiddleware adiciona os headers de CORS para o frontend Next.js.
+// corsMiddleware adds the CORS headers for the Next.js frontend.
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := os.Getenv("CORS_ORIGIN")

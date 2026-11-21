@@ -59,7 +59,7 @@ jobs:
         image: postgres:16-alpine
         env:
           POSTGRES_USER: vitaltag
-          POSTGRES_PASSWORD: senha
+          POSTGRES_PASSWORD: password
           POSTGRES_DB: vitaltag
         ports:
           - 5432:5432
@@ -85,12 +85,12 @@ jobs:
 
       - name: Apply migrations
         env:
-          DATABASE_URL: postgres://vitaltag:senha@localhost:5432/vitaltag?sslmode=disable
+          DATABASE_URL: postgres://vitaltag:password@localhost:5432/vitaltag?sslmode=disable
         run: migrate -path migrations -database "$DATABASE_URL" up
 
       - name: Roll back and re-apply migrations
         env:
-          DATABASE_URL: postgres://vitaltag:senha@localhost:5432/vitaltag?sslmode=disable
+          DATABASE_URL: postgres://vitaltag:password@localhost:5432/vitaltag?sslmode=disable
         run: |
           migrate -path migrations -database "$DATABASE_URL" down 1
           migrate -path migrations -database "$DATABASE_URL" up

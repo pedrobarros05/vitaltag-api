@@ -8,149 +8,149 @@ import (
 
 // ---------- User --------------------------------------------------------------
 
-type Usuario struct {
-	ID            uuid.UUID `json:"id"`
-	Email         string    `json:"email"`
-	SenhaHash     string    `json:"-"`
-	Consentimento bool      `json:"consentimento"`
-	CriadoEm      time.Time `json:"criado_em"`
-	AtualizadoEm  time.Time `json:"atualizado_em"`
+type User struct {
+	ID           uuid.UUID `json:"id"`
+	Email        string    `json:"email"`
+	PasswordHash string    `json:"-"`
+	Consent      bool      `json:"consent"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 // ---------- Profile -----------------------------------------------------------
 
-type SexoTipo string
-type TipoSanguineoTipo string
+type SexType string
+type BloodType string
 
 const (
-	SexoFeminino     SexoTipo = "feminino"
-	SexoMasculino    SexoTipo = "masculino"
-	SexoOutro        SexoTipo = "outro"
-	SexoNaoInformado SexoTipo = "nao_informado"
+	SexFemale      SexType = "female"
+	SexMale        SexType = "male"
+	SexOther       SexType = "other"
+	SexNotInformed SexType = "not_informed"
 )
 
-type Perfil struct {
-	ID               uuid.UUID         `json:"id"`
-	UsuarioID        uuid.UUID         `json:"usuario_id"`
-	Nome             string            `json:"nome"`
-	Sobrenome        string            `json:"sobrenome"`
-	Sexo             SexoTipo          `json:"sexo"`
-	TipoSanguineo    TipoSanguineoTipo `json:"tipo_sanguineo"`
-	SlugPublico      uuid.UUID         `json:"slug_publico"`
-	SenhaPublicaHash string            `json:"-"`
-	Ativo            bool              `json:"ativo"`
-	BloqueadoAte     *time.Time        `json:"bloqueado_ate,omitempty"`
-	CriadoEm         time.Time         `json:"criado_em"`
-	AtualizadoEm     time.Time         `json:"atualizado_em"`
+type Profile struct {
+	ID                 uuid.UUID  `json:"id"`
+	UserID             uuid.UUID  `json:"user_id"`
+	FirstName          string     `json:"first_name"`
+	LastName           string     `json:"last_name"`
+	Sex                SexType    `json:"sex"`
+	BloodType          BloodType  `json:"blood_type"`
+	PublicSlug         uuid.UUID  `json:"public_slug"`
+	PublicPasswordHash string     `json:"-"`
+	Active             bool       `json:"active"`
+	LockedUntil        *time.Time `json:"locked_until,omitempty"`
+	CreatedAt          time.Time  `json:"created_at"`
+	UpdatedAt          time.Time  `json:"updated_at"`
 }
 
 // ---------- Clinical data -----------------------------------------------------
 
-type ContatoEmergencia struct {
-	ID         uuid.UUID `json:"id"`
-	PerfilID   uuid.UUID `json:"perfil_id"`
-	Nome       string    `json:"nome"`
-	Parentesco string    `json:"parentesco,omitempty"`
-	Telefone   string    `json:"telefone"`
-	Principal  bool      `json:"principal"`
+type EmergencyContact struct {
+	ID           uuid.UUID `json:"id"`
+	ProfileID    uuid.UUID `json:"profile_id"`
+	Name         string    `json:"name"`
+	Relationship string    `json:"relationship,omitempty"`
+	Phone        string    `json:"phone"`
+	IsPrimary    bool      `json:"is_primary"`
 }
 
-type Alergia struct {
+type Allergy struct {
+	ID          uuid.UUID `json:"id"`
+	ProfileID   uuid.UUID `json:"profile_id"`
+	Description string    `json:"description"`
+	Severity    string    `json:"severity,omitempty"`
+}
+
+type Medication struct {
 	ID        uuid.UUID `json:"id"`
-	PerfilID  uuid.UUID `json:"perfil_id"`
-	Descricao string    `json:"descricao"`
-	Gravidade string    `json:"gravidade,omitempty"`
+	ProfileID uuid.UUID `json:"profile_id"`
+	Name      string    `json:"name"`
+	Dosage    string    `json:"dosage,omitempty"`
+	Frequency string    `json:"frequency,omitempty"`
 }
 
-type Medicamento struct {
-	ID         uuid.UUID `json:"id"`
-	PerfilID   uuid.UUID `json:"perfil_id"`
-	Nome       string    `json:"nome"`
-	Dosagem    string    `json:"dosagem,omitempty"`
-	Frequencia string    `json:"frequencia,omitempty"`
+type Condition struct {
+	ID          uuid.UUID `json:"id"`
+	ProfileID   uuid.UUID `json:"profile_id"`
+	Description string    `json:"description"`
+	Notes       string    `json:"notes,omitempty"`
 }
 
-type Doenca struct {
-	ID         uuid.UUID `json:"id"`
-	PerfilID   uuid.UUID `json:"perfil_id"`
-	Descricao  string    `json:"descricao"`
-	Observacao string    `json:"observacao,omitempty"`
-}
-
-type Cirurgia struct {
-	ID            uuid.UUID `json:"id"`
-	PerfilID      uuid.UUID `json:"perfil_id"`
-	Descricao     string    `json:"descricao"`
-	AnoRealizacao *int16    `json:"ano_realizacao,omitempty"`
+type Surgery struct {
+	ID          uuid.UUID `json:"id"`
+	ProfileID   uuid.UUID `json:"profile_id"`
+	Description string    `json:"description"`
+	Year        *int16    `json:"year,omitempty"`
 }
 
 // ---------- Complete profile (API response) -----------------------------------
 
-type PerfilCompleto struct {
-	Perfil
-	Contatos     []ContatoEmergencia `json:"contatos_emergencia"`
-	Alergias     []Alergia           `json:"alergias"`
-	Medicamentos []Medicamento       `json:"medicamentos"`
-	Doencas      []Doenca            `json:"doencas"`
-	Cirurgias    []Cirurgia          `json:"cirurgias"`
+type FullProfile struct {
+	Profile
+	EmergencyContacts []EmergencyContact `json:"emergency_contacts"`
+	Allergies         []Allergy          `json:"allergies"`
+	Medications       []Medication       `json:"medications"`
+	Conditions        []Condition        `json:"conditions"`
+	Surgeries         []Surgery          `json:"surgeries"`
 }
 
 // ---------- Requests ----------------------------------------------------------
 
-type RegistroRequest struct {
-	Email         string `json:"email"`
-	Senha         string `json:"senha"`
-	Consentimento bool   `json:"consentimento"`
+type RegisterRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Consent  bool   `json:"consent"`
 }
 
 type LoginRequest struct {
-	Email string `json:"email"`
-	Senha string `json:"senha"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
-type PerfilRequest struct {
-	Nome          string               `json:"nome"`
-	Sobrenome     string               `json:"sobrenome"`
-	Sexo          SexoTipo             `json:"sexo"`
-	TipoSanguineo TipoSanguineoTipo    `json:"tipo_sanguineo"`
-	SenhaPublica  string               `json:"senha_publica"`
-	Contatos      []ContatoRequest     `json:"contatos_emergencia"`
-	Alergias      []AlergiaRequest     `json:"alergias"`
-	Medicamentos  []MedicamentoRequest `json:"medicamentos"`
-	Doencas       []DoencaRequest      `json:"doencas"`
-	Cirurgias     []CirurgiaRequest    `json:"cirurgias"`
+type ProfileRequest struct {
+	FirstName         string                    `json:"first_name"`
+	LastName          string                    `json:"last_name"`
+	Sex               SexType                   `json:"sex"`
+	BloodType         BloodType                 `json:"blood_type"`
+	PublicPassword    string                    `json:"public_password"`
+	EmergencyContacts []EmergencyContactRequest `json:"emergency_contacts"`
+	Allergies         []AllergyRequest          `json:"allergies"`
+	Medications       []MedicationRequest       `json:"medications"`
+	Conditions        []ConditionRequest        `json:"conditions"`
+	Surgeries         []SurgeryRequest          `json:"surgeries"`
 }
 
-type ContatoRequest struct {
-	Nome       string `json:"nome"`
-	Parentesco string `json:"parentesco"`
-	Telefone   string `json:"telefone"`
-	Principal  bool   `json:"principal"`
+type EmergencyContactRequest struct {
+	Name         string `json:"name"`
+	Relationship string `json:"relationship"`
+	Phone        string `json:"phone"`
+	IsPrimary    bool   `json:"is_primary"`
 }
 
-type AlergiaRequest struct {
-	Descricao string `json:"descricao"`
-	Gravidade string `json:"gravidade"`
+type AllergyRequest struct {
+	Description string `json:"description"`
+	Severity    string `json:"severity"`
 }
 
-type MedicamentoRequest struct {
-	Nome       string `json:"nome"`
-	Dosagem    string `json:"dosagem"`
-	Frequencia string `json:"frequencia"`
+type MedicationRequest struct {
+	Name      string `json:"name"`
+	Dosage    string `json:"dosage"`
+	Frequency string `json:"frequency"`
 }
 
-type DoencaRequest struct {
-	Descricao  string `json:"descricao"`
-	Observacao string `json:"observacao"`
+type ConditionRequest struct {
+	Description string `json:"description"`
+	Notes       string `json:"notes"`
 }
 
-type CirurgiaRequest struct {
-	Descricao     string `json:"descricao"`
-	AnoRealizacao *int16 `json:"ano_realizacao"`
+type SurgeryRequest struct {
+	Description string `json:"description"`
+	Year        *int16 `json:"year"`
 }
 
-type AcessoPublicoRequest struct {
-	Senha string `json:"senha"`
+type PublicAccessRequest struct {
+	Password string `json:"password"`
 }
 
 // ---------- Responses ---------------------------------------------------------
@@ -159,6 +159,6 @@ type TokenResponse struct {
 	Token string `json:"token"`
 }
 
-type ErroResponse struct {
-	Erro string `json:"erro"`
+type ErrorResponse struct {
+	Error string `json:"error"`
 }

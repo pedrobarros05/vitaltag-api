@@ -12,16 +12,16 @@ import (
 func NewPool(ctx context.Context) (*pgxpool.Pool, error) {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
-		return nil, fmt.Errorf("DATABASE_URL não configurada")
+		return nil, fmt.Errorf("DATABASE_URL is not set")
 	}
 
 	pool, err := pgxpool.New(ctx, dsn)
 	if err != nil {
-		return nil, fmt.Errorf("falha ao criar pool: %w", err)
+		return nil, fmt.Errorf("failed to create pool: %w", err)
 	}
 
 	if err := pool.Ping(ctx); err != nil {
-		return nil, fmt.Errorf("falha ao conectar ao banco: %w", err)
+		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 
 	return pool, nil

@@ -45,13 +45,13 @@ go run ./cmd/api
 
 | Method | Route | Description |
 |---|---|---|
-| POST | `/api/v1/auth/registro` | creates an account (RF01) |
+| POST | `/api/v1/auth/register` | creates an account (RF01) |
 | POST | `/api/v1/auth/login` | authenticates and issues a token (RF02) |
-| GET | `/api/v1/perfil` | returns the authenticated user's profile (RF11) |
-| POST | `/api/v1/perfil` | creates or updates clinical information (RF04, RF05, RF12) |
-| GET | `/api/v1/perfil/qrcode` | returns the QR Code as PNG/SVG (RF06) |
-| DELETE | `/api/v1/perfil` | deletes the complete record (RF10) |
-| POST | `/api/v1/publico/{slug}` | validates the public password and returns the data (RF08, RF09) |
+| GET | `/api/v1/profile` | returns the authenticated user's profile (RF11) |
+| POST | `/api/v1/profile` | creates or updates clinical information (RF04, RF05, RF12) |
+| GET | `/api/v1/profile/qrcode` | returns the QR Code as PNG/SVG (RF06) |
+| DELETE | `/api/v1/profile` | deletes the complete record (RF10) |
+| POST | `/api/v1/public/{slug}` | validates the public password and returns the data (RF08, RF09) |
 
 ## Documentation
 
