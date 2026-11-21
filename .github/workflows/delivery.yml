@@ -28,10 +28,10 @@ jobs:
             goarch: arm64
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
           cache: true
@@ -55,7 +55,7 @@ jobs:
           tar -czf "dist/vitaltag-api-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz" -C package .
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: vitaltag-api-${{ matrix.goos }}-${{ matrix.goarch }}
           path: dist/*.tar.gz
@@ -71,7 +71,7 @@ jobs:
       contents: write
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: dist
           pattern: vitaltag-api-*
