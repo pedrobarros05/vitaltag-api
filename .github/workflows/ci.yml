@@ -26,7 +26,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v7
         with:
-          go-version-file: go.mod
+          go-version: "1.27.4"
           cache: true
 
       - name: Check formatting
@@ -75,7 +75,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v7
         with:
-          go-version-file: go.mod
+          go-version: "1.27.4"
           cache: true
 
       - name: Install migration tool
@@ -106,7 +106,7 @@ jobs:
       - name: Run govulncheck
         uses: actions/setup-go@v7
         with:
-          go-version-file: go.mod
+          go-version: "1.27.4"
 
       - name: Install govulncheck
         run: |
