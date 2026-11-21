@@ -12,8 +12,8 @@ import (
 )
 
 type PerfilHandler struct {
-	perfilSvc  *service.PerfilService
-	qrCodeSvc  *service.QRCodeService
+	perfilSvc *service.PerfilService
+	qrCodeSvc *service.QRCodeService
 }
 
 func NewPerfilHandler(ps *service.PerfilService, qs *service.QRCodeService) *PerfilHandler {

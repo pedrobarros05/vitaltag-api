@@ -9,12 +9,12 @@ import (
 // ---------- User --------------------------------------------------------------
 
 type Usuario struct {
-	ID           uuid.UUID `json:"id"`
-	Email        string    `json:"email"`
-	SenhaHash    string    `json:"-"`
-	Consentimento bool     `json:"consentimento"`
-	CriadoEm    time.Time  `json:"criado_em"`
-	AtualizadoEm time.Time `json:"atualizado_em"`
+	ID            uuid.UUID `json:"id"`
+	Email         string    `json:"email"`
+	SenhaHash     string    `json:"-"`
+	Consentimento bool      `json:"consentimento"`
+	CriadoEm      time.Time `json:"criado_em"`
+	AtualizadoEm  time.Time `json:"atualizado_em"`
 }
 
 // ---------- Profile -----------------------------------------------------------
@@ -23,9 +23,9 @@ type SexoTipo string
 type TipoSanguineoTipo string
 
 const (
-	SexoFeminino    SexoTipo = "feminino"
-	SexoMasculino   SexoTipo = "masculino"
-	SexoOutro       SexoTipo = "outro"
+	SexoFeminino     SexoTipo = "feminino"
+	SexoMasculino    SexoTipo = "masculino"
+	SexoOutro        SexoTipo = "outro"
 	SexoNaoInformado SexoTipo = "nao_informado"
 )
 
@@ -40,19 +40,19 @@ type Perfil struct {
 	SenhaPublicaHash string            `json:"-"`
 	Ativo            bool              `json:"ativo"`
 	BloqueadoAte     *time.Time        `json:"bloqueado_ate,omitempty"`
-	CriadoEm        time.Time          `json:"criado_em"`
-	AtualizadoEm    time.Time          `json:"atualizado_em"`
+	CriadoEm         time.Time         `json:"criado_em"`
+	AtualizadoEm     time.Time         `json:"atualizado_em"`
 }
 
 // ---------- Clinical data -----------------------------------------------------
 
 type ContatoEmergencia struct {
-	ID        uuid.UUID `json:"id"`
-	PerfilID  uuid.UUID `json:"perfil_id"`
-	Nome      string    `json:"nome"`
-	Parentesco string   `json:"parentesco,omitempty"`
-	Telefone  string    `json:"telefone"`
-	Principal bool      `json:"principal"`
+	ID         uuid.UUID `json:"id"`
+	PerfilID   uuid.UUID `json:"perfil_id"`
+	Nome       string    `json:"nome"`
+	Parentesco string    `json:"parentesco,omitempty"`
+	Telefone   string    `json:"telefone"`
+	Principal  bool      `json:"principal"`
 }
 
 type Alergia struct {
@@ -63,36 +63,36 @@ type Alergia struct {
 }
 
 type Medicamento struct {
-	ID        uuid.UUID `json:"id"`
-	PerfilID  uuid.UUID `json:"perfil_id"`
-	Nome      string    `json:"nome"`
-	Dosagem   string    `json:"dosagem,omitempty"`
-	Frequencia string   `json:"frequencia,omitempty"`
+	ID         uuid.UUID `json:"id"`
+	PerfilID   uuid.UUID `json:"perfil_id"`
+	Nome       string    `json:"nome"`
+	Dosagem    string    `json:"dosagem,omitempty"`
+	Frequencia string    `json:"frequencia,omitempty"`
 }
 
 type Doenca struct {
-	ID        uuid.UUID `json:"id"`
-	PerfilID  uuid.UUID `json:"perfil_id"`
-	Descricao string    `json:"descricao"`
-	Observacao string   `json:"observacao,omitempty"`
+	ID         uuid.UUID `json:"id"`
+	PerfilID   uuid.UUID `json:"perfil_id"`
+	Descricao  string    `json:"descricao"`
+	Observacao string    `json:"observacao,omitempty"`
 }
 
 type Cirurgia struct {
-	ID           uuid.UUID `json:"id"`
-	PerfilID     uuid.UUID `json:"perfil_id"`
-	Descricao    string    `json:"descricao"`
-	AnoRealizacao *int16   `json:"ano_realizacao,omitempty"`
+	ID            uuid.UUID `json:"id"`
+	PerfilID      uuid.UUID `json:"perfil_id"`
+	Descricao     string    `json:"descricao"`
+	AnoRealizacao *int16    `json:"ano_realizacao,omitempty"`
 }
 
 // ---------- Complete profile (API response) -----------------------------------
 
 type PerfilCompleto struct {
 	Perfil
-	Contatos    []ContatoEmergencia `json:"contatos_emergencia"`
-	Alergias    []Alergia           `json:"alergias"`
-	Medicamentos []Medicamento      `json:"medicamentos"`
-	Doencas     []Doenca            `json:"doencas"`
-	Cirurgias   []Cirurgia          `json:"cirurgias"`
+	Contatos     []ContatoEmergencia `json:"contatos_emergencia"`
+	Alergias     []Alergia           `json:"alergias"`
+	Medicamentos []Medicamento       `json:"medicamentos"`
+	Doencas      []Doenca            `json:"doencas"`
+	Cirurgias    []Cirurgia          `json:"cirurgias"`
 }
 
 // ---------- Requests ----------------------------------------------------------
@@ -109,23 +109,23 @@ type LoginRequest struct {
 }
 
 type PerfilRequest struct {
-	Nome          string            `json:"nome"`
-	Sobrenome     string            `json:"sobrenome"`
-	Sexo          SexoTipo          `json:"sexo"`
-	TipoSanguineo TipoSanguineoTipo `json:"tipo_sanguineo"`
-	SenhaPublica  string            `json:"senha_publica"`
-	Contatos      []ContatoRequest  `json:"contatos_emergencia"`
-	Alergias      []AlergiaRequest  `json:"alergias"`
+	Nome          string               `json:"nome"`
+	Sobrenome     string               `json:"sobrenome"`
+	Sexo          SexoTipo             `json:"sexo"`
+	TipoSanguineo TipoSanguineoTipo    `json:"tipo_sanguineo"`
+	SenhaPublica  string               `json:"senha_publica"`
+	Contatos      []ContatoRequest     `json:"contatos_emergencia"`
+	Alergias      []AlergiaRequest     `json:"alergias"`
 	Medicamentos  []MedicamentoRequest `json:"medicamentos"`
-	Doencas       []DoencaRequest   `json:"doencas"`
-	Cirurgias     []CirurgiaRequest `json:"cirurgias"`
+	Doencas       []DoencaRequest      `json:"doencas"`
+	Cirurgias     []CirurgiaRequest    `json:"cirurgias"`
 }
 
 type ContatoRequest struct {
-	Nome      string `json:"nome"`
+	Nome       string `json:"nome"`
 	Parentesco string `json:"parentesco"`
-	Telefone  string `json:"telefone"`
-	Principal bool   `json:"principal"`
+	Telefone   string `json:"telefone"`
+	Principal  bool   `json:"principal"`
 }
 
 type AlergiaRequest struct {
@@ -134,8 +134,8 @@ type AlergiaRequest struct {
 }
 
 type MedicamentoRequest struct {
-	Nome      string `json:"nome"`
-	Dosagem   string `json:"dosagem"`
+	Nome       string `json:"nome"`
+	Dosagem    string `json:"dosagem"`
 	Frequencia string `json:"frequencia"`
 }
 
